@@ -1,41 +1,35 @@
 package com.fastcampus.board.controller;
 
 import com.fastcampus.board.model.Post;
-import org.springframework.http.HttpStatus;
+import com.fastcampus.board.service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api/v1/posts")
 public class PostController {
 
-    @GetMapping("/api/v1/posts")
-    public ResponseEntity<List<Post>> getPosts() {
-        List<Post> posts = new ArrayList<>();
-        posts.add(new Post(1L, "hello 1", ZonedDateTime.now()));
-        posts.add(new Post(2L, "hello 2", ZonedDateTime.now()));
-        posts.add(new Post(3L, "hello 3", ZonedDateTime.now()));
+    @Autowired
+    private PostService postService;
 
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    @GetMapping
+    public ResponseEntity<List<Post>> getPosts() {
+        List<Post> posts = postService.getPosts();
+        return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/api/v1/posts/{postId}")
-    public ResponseEntity<Post> getPost(@PathVariable Long postId) {
-        List<Post> posts = new ArrayList<>();
-        posts.add(new Post(1L, "hello 1", ZonedDateTime.now()));
-        posts.add(new Post(2L, "hello 2", ZonedDateTime.now()));
-        posts.add(new Post(3L, "hello 3", ZonedDateTime.now()));
+    @GetMapping("/{postId}")
+    public ResponseEntity<Post> getPostByPostId(@PathVariable Long postId) {
+        Optional<Post> findPost = postService.getPostByPostId(postId);
 
-        Optional<Post> matchingPost =
-                posts.stream().filter(post -> postId.equals(post.getPostId())).findFirst();
-
-        return matchingPost
+        return findPost
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
