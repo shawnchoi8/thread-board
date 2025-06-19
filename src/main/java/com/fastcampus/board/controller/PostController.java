@@ -2,6 +2,7 @@ package com.fastcampus.board.controller;
 
 import com.fastcampus.board.model.Post;
 import com.fastcampus.board.model.PostCreateRequestBody;
+import com.fastcampus.board.model.PostUpdateRequestBody;
 import com.fastcampus.board.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,13 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Post> createPost(@RequestBody PostCreateRequestBody postCreateRequestBody) {
-        Post post = postService.createPost(postCreateRequestBody);
-        return ResponseEntity.ok(post);
+        Post createdPost = postService.createPost(postCreateRequestBody);
+        return ResponseEntity.ok(createdPost);
+    }
+
+    @PatchMapping("/{postId}")
+    public ResponseEntity<Post> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequestBody updateRequestBody) {
+        Post updatedPost = postService.updatePost(postId, updateRequestBody);
+        return ResponseEntity.ok(updatedPost);
     }
 }

@@ -2,7 +2,10 @@ package com.fastcampus.board.service;
 
 import com.fastcampus.board.model.Post;
 import com.fastcampus.board.model.PostCreateRequestBody;
+import com.fastcampus.board.model.PostUpdateRequestBody;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -35,5 +38,17 @@ public class PostService {
         posts.add(newPost);
 
         return newPost;
+    }
+
+    public Post updatePost(Long postId, PostUpdateRequestBody updateRequestBody) {
+        Optional<Post> postOptional = posts.stream().filter(post -> postId.equals(post.getPostId())).findFirst();
+
+        if (postOptional.isPresent()) {
+            Post findPost = postOptional.get();
+            findPost.setBody(updateRequestBody.getBody()); //body update
+            return findPost;
+        } else { // post가 없으면
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
+        }
     }
 }
