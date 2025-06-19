@@ -1,6 +1,7 @@
 package com.fastcampus.board.service;
 
 import com.fastcampus.board.model.Post;
+import com.fastcampus.board.model.PostCreateRequestBody;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -25,5 +26,14 @@ public class PostService {
 
     public Optional<Post> getPostByPostId(Long postId) {
         return posts.stream().filter(post -> postId.equals(post.getPostId())).findFirst();
+    }
+
+    public Post createPost(PostCreateRequestBody postCreateRequestBody) {
+        Long newPostId = posts.stream().mapToLong(Post::getPostId).max().orElse(0L) + 1; //새로 생성될 post의 postId 추출
+
+        Post newPost = new Post(newPostId, postCreateRequestBody.getBody(), ZonedDateTime.now());
+        posts.add(newPost);
+
+        return newPost;
     }
 }

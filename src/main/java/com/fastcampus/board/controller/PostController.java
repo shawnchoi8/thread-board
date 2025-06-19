@@ -1,13 +1,11 @@
 package com.fastcampus.board.controller;
 
 import com.fastcampus.board.model.Post;
+import com.fastcampus.board.model.PostCreateRequestBody;
 import com.fastcampus.board.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,5 +30,11 @@ public class PostController {
         return findPost
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Post> createPost(@RequestBody PostCreateRequestBody postCreateRequestBody) {
+        Post post = postService.createPost(postCreateRequestBody);
+        return ResponseEntity.ok(post);
     }
 }
