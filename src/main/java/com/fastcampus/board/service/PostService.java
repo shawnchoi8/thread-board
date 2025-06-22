@@ -3,32 +3,34 @@ package com.fastcampus.board.service;
 import com.fastcampus.board.model.Post;
 import com.fastcampus.board.model.PostCreateRequestBody;
 import com.fastcampus.board.model.PostUpdateRequestBody;
+import com.fastcampus.board.model.entity.PostEntity;
+import com.fastcampus.board.repository.PostEntityRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class PostService {
 
-    private static final List<Post> posts = new ArrayList<>();
-
-    static {
-        posts.add(new Post(1L, "hello 1", ZonedDateTime.now()));
-        posts.add(new Post(2L, "hello 2", ZonedDateTime.now()));
-        posts.add(new Post(3L, "hello 3", ZonedDateTime.now()));
-    }
+    @Autowired
+    private final PostEntityRepository postEntityRepository;
 
     public List<Post> getPosts() {
-        return posts;
+        List<PostEntity> postEntities = postEntityRepository.findAll();
+        return postEntities.stream().map(Post::from).toList();
     }
 
-    public Optional<Post> getPostByPostId(Long postId) {
-        return posts.stream().filter(post -> postId.equals(post.getPostId())).findFirst();
+    public Post getPostByPostId(Long postId) {
+        PostEntity postEntity = postEntityRepository.findById(postId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+        return Post.from(postEntity);
     }
 
     public Post createPost(PostCreateRequestBody postCreateRequestBody) {
