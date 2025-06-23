@@ -9,16 +9,14 @@ import java.time.ZonedDateTime;
 public record Post(Long postId,
                    String body,
                    ZonedDateTime createdDateTime,
-                   ZonedDateTime updatedDateTime,
-                   ZonedDateTime deletedDateTime) {
+                   ZonedDateTime updatedDateTime) {
 
     public static Post from(PostEntity postEntity) {
         return new Post(
                 postEntity.getPostId(),
                 postEntity.getBody(),
                 postEntity.getCreatedDateTime(),
-                postEntity.getUpdatedDateTime(),
-                postEntity.getDeletedDateTime()
+                postEntity.getUpdatedDateTime()
         );
     }
 }
