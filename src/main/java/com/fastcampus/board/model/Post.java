@@ -1,9 +1,11 @@
 package com.fastcampus.board.model;
 
 import com.fastcampus.board.model.entity.PostEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.ZonedDateTime;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record Post(Long postId,
                    String body,
                    ZonedDateTime createdDateTime,
