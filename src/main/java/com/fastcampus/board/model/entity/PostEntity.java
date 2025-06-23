@@ -33,4 +33,15 @@ public class PostEntity {
 
     @Column
     private ZonedDateTime deletedDateTime; //soft delete
+
+    @PrePersist
+    private void prePersist() {
+        this.createdDateTime = ZonedDateTime.now();
+        this.updatedDateTime = this.createdDateTime;
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        this.updatedDateTime = ZonedDateTime.now();
+    }
 }

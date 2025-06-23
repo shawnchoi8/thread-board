@@ -34,12 +34,10 @@ public class PostService {
     }
 
     public Post createPost(PostCreateRequestBody postCreateRequestBody) {
-        Long newPostId = posts.stream().mapToLong(Post::getPostId).max().orElse(0L) + 1; //새로 생성될 post의 postId 추출
-
-        Post newPost = new Post(newPostId, postCreateRequestBody.getBody(), ZonedDateTime.now());
-        posts.add(newPost);
-
-        return newPost;
+        PostEntity postEntity = new PostEntity();
+        postEntity.setBody(postCreateRequestBody.getBody());
+        PostEntity savedPostEntity = postEntityRepository.save(postEntity);
+        return Post.from(savedPostEntity);
     }
 
     public Post updatePost(Long postId, PostUpdateRequestBody updateRequestBody) {
