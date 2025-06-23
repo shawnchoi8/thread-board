@@ -6,20 +6,16 @@ import com.fastcampus.board.model.PostUpdateRequestBody;
 import com.fastcampus.board.model.entity.PostEntity;
 import com.fastcampus.board.repository.PostEntityRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class PostService {
 
-    @Autowired
     private final PostEntityRepository postEntityRepository;
 
     public List<Post> getPosts() {
@@ -41,24 +37,20 @@ public class PostService {
     }
 
     public Post updatePost(Long postId, PostUpdateRequestBody updateRequestBody) {
-        Optional<Post> postOptional = posts.stream().filter(post -> postId.equals(post.getPostId())).findFirst();
+        PostEntity postEntity = postEntityRepository.findById(postId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
 
-        if (postOptional.isPresent()) {
-            Post findPost = postOptional.get();
-            findPost.setBody(updateRequestBody.getBody()); //body update
-            return findPost;
-        } else { // post가 없으면
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
-        }
+        postEntity.setBody(updateRequestBody.getBody());
+        PostEntity updatedPostEntity = postEntityRepository.save(postEntity);
+        // TODO: remove save() after @Transactional -> dirty checking in Service class
+
+        return Post.from(updatedPostEntity);
     }
 
     public void deletePost(Long postId) {
-        Optional<Post> postOptional = posts.stream().filter(post -> postId.equals(post.getPostId())).findFirst();
+        PostEntity postEntity = postEntityRepository.findById(postId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
 
-        if (postOptional.isPresent()) {
-            posts.remove(postOptional.get());
-        } else { // post가 없으면
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
-        }
+        postEntityRepository.delete(postEntity);
     }
 }
