@@ -16,7 +16,10 @@ spring:
   security:
     user.name: board-admin
     user.password: board-admin-password
-
+logging:
+  level:
+    # TRACE < DEBUG < INFO < WARN < ERROR
+    root: INFO
 #logging:
 #  level:
 #    org.hibernate.type: TRACE
