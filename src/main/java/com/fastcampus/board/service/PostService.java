@@ -1,14 +1,13 @@
 package com.fastcampus.board.service;
 
+import com.fastcampus.board.exception.post.PostNotFoundException;
 import com.fastcampus.board.model.Post;
 import com.fastcampus.board.model.PostCreateRequestBody;
 import com.fastcampus.board.model.PostUpdateRequestBody;
 import com.fastcampus.board.model.entity.PostEntity;
 import com.fastcampus.board.repository.PostEntityRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class PostService {
 
     public Post getPostByPostId(Long postId) {
         PostEntity postEntity = postEntityRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
         return Post.from(postEntity);
     }
 
@@ -38,7 +37,7 @@ public class PostService {
 
     public Post updatePost(Long postId, PostUpdateRequestBody updateRequestBody) {
         PostEntity postEntity = postEntityRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
 
         postEntity.setBody(updateRequestBody.getBody());
         PostEntity updatedPostEntity = postEntityRepository.save(postEntity);
@@ -49,7 +48,7 @@ public class PostService {
 
     public void deletePost(Long postId) {
         PostEntity postEntity = postEntityRepository.findById(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
+                .orElseThrow(() -> new PostNotFoundException(postId));
 
         postEntityRepository.delete(postEntity);
     }
