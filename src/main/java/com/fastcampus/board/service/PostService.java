@@ -1,9 +1,9 @@
 package com.fastcampus.board.service;
 
 import com.fastcampus.board.exception.post.PostNotFoundException;
-import com.fastcampus.board.model.Post;
-import com.fastcampus.board.model.PostCreateRequestBody;
-import com.fastcampus.board.model.PostUpdateRequestBody;
+import com.fastcampus.board.model.post.Post;
+import com.fastcampus.board.model.post.PostCreateRequestBody;
+import com.fastcampus.board.model.post.PostUpdateRequestBody;
 import com.fastcampus.board.model.entity.PostEntity;
 import com.fastcampus.board.repository.PostEntityRepository;
 import lombok.RequiredArgsConstructor;

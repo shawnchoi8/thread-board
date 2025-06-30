@@ -1,8 +1,8 @@
 package com.fastcampus.board.controller;
 
-import com.fastcampus.board.model.Post;
-import com.fastcampus.board.model.PostCreateRequestBody;
-import com.fastcampus.board.model.PostUpdateRequestBody;
+import com.fastcampus.board.model.post.Post;
+import com.fastcampus.board.model.post.PostCreateRequestBody;
+import com.fastcampus.board.model.post.PostUpdateRequestBody;
 import com.fastcampus.board.service.PostService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
