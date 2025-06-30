@@ -45,7 +45,7 @@ public class UserEntity implements UserDetails {
     private ZonedDateTime updatedDateTime;
 
     @Column
-    private ZonedDateTime deletedDatedTime;
+    private ZonedDateTime deletedDateTime;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { // 현재 사용자별로 admin, 일반 이런식으로 구분하지 않을거임
@@ -76,8 +76,8 @@ public class UserEntity implements UserDetails {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(username);
         userEntity.setPassword(password);
-        //이 프로젝트에서는 설정 안하고 그냥 고정된거 랜덤으로 쓰자
-        userEntity.setProfile("https://dev-jayce.github.io/public/profile/" + new Random().nextInt(100) + ".png");
+        //이 프로젝트에서는 설정 안하고 그냥 고정된거 랜덤으로 쓰자 (1~100)
+        userEntity.setProfile("https://dev-jayce.github.io/public/profile/" + (new Random().nextInt(100) + 1) + ".png");
 
         return userEntity;
     }
