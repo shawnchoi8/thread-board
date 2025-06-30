@@ -1,6 +1,8 @@
 package com.fastcampus.board.service;
 
 import com.fastcampus.board.exception.post.PostNotFoundException;
+import com.fastcampus.board.exception.user.UserNotAllowedException;
+import com.fastcampus.board.model.entity.UserEntity;
 import com.fastcampus.board.model.post.Post;
 import com.fastcampus.board.model.post.PostCreateRequestBody;
 import com.fastcampus.board.model.post.PostUpdateRequestBody;
@@ -28,16 +30,19 @@ public class PostService {
         return Post.from(postEntity);
     }
 
-    public Post createPost(PostCreateRequestBody postCreateRequestBody) {
-        PostEntity postEntity = new PostEntity();
-        postEntity.setBody(postCreateRequestBody.getBody());
+    public Post createPost(PostCreateRequestBody postCreateRequestBody, UserEntity currentUser) {
+        PostEntity postEntity = PostEntity.of(postCreateRequestBody.getBody(), currentUser);
         PostEntity savedPostEntity = postEntityRepository.save(postEntity);
         return Post.from(savedPostEntity);
     }
 
-    public Post updatePost(Long postId, PostUpdateRequestBody updateRequestBody) {
+    public Post updatePost(Long postId, PostUpdateRequestBody updateRequestBody, UserEntity currentUser) {
         PostEntity postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(postId));
+
+        if (!postEntity.getUser().equals(currentUser)) { // postEntity 의 user 와 currentUser 가 일치해야 update 가능
+            throw new UserNotAllowedException();
+        }
 
         postEntity.setBody(updateRequestBody.getBody());
         PostEntity updatedPostEntity = postEntityRepository.save(postEntity);
@@ -46,9 +51,13 @@ public class PostService {
         return Post.from(updatedPostEntity);
     }
 
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId, UserEntity currentUser) {
         PostEntity postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(postId));
+
+        if (!postEntity.getUser().equals(currentUser)) { // postEntity 의 user 와 currentUser 가 일치해야 delete 가능
+            throw new UserNotAllowedException();
+        }
 
         postEntityRepository.delete(postEntity);
     }
