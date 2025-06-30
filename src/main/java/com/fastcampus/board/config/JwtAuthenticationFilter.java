@@ -1,6 +1,5 @@
 package com.fastcampus.board.config;
 
-import com.fastcampus.board.exception.jwt.JwtTokenNotFoundException;
 import com.fastcampus.board.service.JwtService;
 import com.fastcampus.board.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -49,9 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authorization = request.getHeader(HttpHeaders.AUTHORIZATION); //request의 header 에서 authorization 값을 받는다
         SecurityContext securityContext = SecurityContextHolder.getContext();
 
-        if (ObjectUtils.isEmpty(authorization) || authorization.startsWith(BEARER_PREFIX)) {
-            throw new JwtTokenNotFoundException();
-        }
+//        if (ObjectUtils.isEmpty(authorization) || !authorization.startsWith(BEARER_PREFIX)) {
+//            throw new JwtTokenNotFoundException();
+//        }
 
         if (!ObjectUtils.isEmpty(authorization)
                 && authorization.startsWith(BEARER_PREFIX)

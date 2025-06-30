@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -45,17 +46,20 @@ public class WebConfiguration {
      * 2. basic auth를 사용 할 것이고
      * 3. csrf는 아예 제외를 시킬 것이다
      * 4. 나는 REST API를 개발하기 때문에, Session 자체가 필요 없음 -> 세션 생성을 아예 안해
+     * 5. 회원가입을 할 때는 토큰도 없고 인증 정보도 없기때문에, permit all을 해줘 (인증 하지 말고)
      */
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors(Customizer.withDefaults()) //CORS 설정 추가
-                .authorizeHttpRequests((requests) -> requests.anyRequest().authenticated()) // 1
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(HttpMethod.POST,"/api/v1/users").permitAll() //5
+                        .anyRequest().authenticated()) // 1
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 4
                 .csrf(CsrfConfigurer::disable) // 3
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter, jwtAuthenticationFilter.getClass())
-                .httpBasic((Customizer.withDefaults())); // 2
+                .httpBasic(Customizer.withDefaults()); // 2
 
         return httpSecurity.build();
     }
