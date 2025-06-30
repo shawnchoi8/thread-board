@@ -25,7 +25,7 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 
         try {
             filterChain.doFilter(request, response);
-        } catch (JwtException e) {
+        } catch (JwtException exception) {
             //JWT 관련 custom 에러 메시지 생성해서 response로 내려주기
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -33,12 +33,11 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
 
             HashMap<String, Object> errorMap = new HashMap<>();
             errorMap.put("status", HttpStatus.UNAUTHORIZED);
-            errorMap.put("message", e.getMessage());
+            errorMap.put("message", exception.getMessage());
 
             ObjectMapper objectMapper = new ObjectMapper();
             String responseJson = objectMapper.writeValueAsString(errorMap); // json 으로 직렬화
             response.getWriter().write(responseJson);
-
         }
     }
 }

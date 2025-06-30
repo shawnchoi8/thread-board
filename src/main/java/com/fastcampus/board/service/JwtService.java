@@ -29,7 +29,7 @@ public class JwtService {
     }
 
     /**
-     * accessToken으로부터 username을 추출
+     * accessToken 으로부터 username을 추출
      */
     public String getUsername(String accessToken) {
         return getSubject(accessToken);
@@ -62,7 +62,6 @@ public class JwtService {
                     .parseSignedClaims(token)
                     .getPayload()
                     .getSubject();
-
         } catch (JwtException e) {
             log.error("JwtException", e);
             throw e;
