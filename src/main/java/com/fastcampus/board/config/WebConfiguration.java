@@ -53,7 +53,7 @@ public class WebConfiguration {
         httpSecurity
                 .cors(Customizer.withDefaults()) //CORS 설정 추가
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.POST,"/api/v1/users").permitAll() //5
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/**").permitAll() //5
                         .anyRequest().authenticated()) // 1
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 4
                 .csrf(CsrfConfigurer::disable) // 3
