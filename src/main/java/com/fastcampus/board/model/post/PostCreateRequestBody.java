@@ -1,4 +1,4 @@
-package com.fastcampus.board.model;
+package com.fastcampus.board.model.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

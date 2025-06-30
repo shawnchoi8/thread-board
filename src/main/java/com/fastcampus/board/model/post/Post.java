@@ -1,4 +1,4 @@
-package com.fastcampus.board.model;
+package com.fastcampus.board.model.post;
 
 import com.fastcampus.board.model.entity.PostEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
