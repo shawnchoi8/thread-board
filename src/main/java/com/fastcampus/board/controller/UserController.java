@@ -3,6 +3,7 @@ package com.fastcampus.board.controller;
 import com.fastcampus.board.model.user.User;
 import com.fastcampus.board.model.user.UserSignUpRequestBody;
 import com.fastcampus.board.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> signUp(@RequestBody UserSignUpRequestBody userSignUpRequestBody) {
+    public ResponseEntity<User> signUp(@Valid @RequestBody UserSignUpRequestBody userSignUpRequestBody) {
         User user = userService.signUp(userSignUpRequestBody.username(), userSignUpRequestBody.password());
         return ResponseEntity.ok(user);
     }
