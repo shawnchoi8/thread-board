@@ -11,7 +11,6 @@ import com.fastcampus.board.model.entity.PostEntity;
 import com.fastcampus.board.repository.PostEntityRepository;
 import com.fastcampus.board.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
