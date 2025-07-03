@@ -2,13 +2,16 @@ package com.fastcampus.board.service;
 
 import com.fastcampus.board.exception.post.PostNotFoundException;
 import com.fastcampus.board.exception.user.UserNotAllowedException;
+import com.fastcampus.board.exception.user.UserNotFoundException;
 import com.fastcampus.board.model.entity.UserEntity;
 import com.fastcampus.board.model.post.Post;
 import com.fastcampus.board.model.post.PostCreateRequestBody;
 import com.fastcampus.board.model.post.PostUpdateRequestBody;
 import com.fastcampus.board.model.entity.PostEntity;
 import com.fastcampus.board.repository.PostEntityRepository;
+import com.fastcampus.board.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,8 @@ import java.util.List;
 public class PostService {
 
     private final PostEntityRepository postEntityRepository;
+
+    private final UserEntityRepository userEntityRepository;
 
     public List<Post> getPosts() {
         List<PostEntity> postEntities = postEntityRepository.findAll();
@@ -60,5 +65,13 @@ public class PostService {
         }
 
         postEntityRepository.delete(postEntity);
+    }
+
+    public List<Post> getPostsByUsername(String username) {
+        UserEntity userEntity = userEntityRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException(username));
+
+        List<PostEntity> posts = postEntityRepository.findByUser(userEntity);
+        return posts.stream().map(Post::from).toList();
     }
 }
