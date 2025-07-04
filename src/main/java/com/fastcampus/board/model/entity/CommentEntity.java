@@ -16,7 +16,8 @@ import java.time.ZonedDateTime;
 @EqualsAndHashCode
 @SQLDelete(sql = "UPDATE \"comment\" SET deleteddatetime = CURRENT_TIMESTAMP WHERE commentid = ?")
 @SQLRestriction("deleteddatetime IS NULL")
-@Table(name = "comment")
+@Table(name = "comment",
+        indexes = {@Index(name = "comment_userid_idx", columnList = "userid"), @Index(name = "comment_postid_idx", columnList = "postid")})
 @Entity
 public class CommentEntity {
 

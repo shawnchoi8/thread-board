@@ -26,6 +26,9 @@ public class PostEntity {
     @Column(columnDefinition = "TEXT")
     private String body;
 
+    @Column
+    private Long commentCount = 0L;
+
     @ManyToOne
     @JoinColumn(name = "userid")
     private UserEntity user;

@@ -13,6 +13,7 @@ import com.fastcampus.board.repository.CommentEntityRepository;
 import com.fastcampus.board.repository.PostEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,12 +31,14 @@ public class CommentService {
         return comments.stream().map(Comment::from).toList();
     }
 
+    @Transactional
     public Comment createComment(Long postId, CreateCommentRequestBody requestBody, UserEntity currentUser) {
         PostEntity postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(postId));
 
         CommentEntity commentEntity = CommentEntity.of(requestBody.body(), currentUser, postEntity);
         commentEntityRepository.save(commentEntity);
+        postEntity.setCommentCount(postEntity.getCommentCount() + 1); //댓글 생성 시 댓글 숫자 카운트 +1
         return Comment.from(commentEntity);
     }
 
@@ -51,10 +54,11 @@ public class CommentService {
         }
 
         commentEntity.setBody(updateCommentRequest.body());
-        commentEntityRepository.save(commentEntity);
+        commentEntityRepository.save(commentEntity); // Todo : 이거 save 꼭 해줘야하나? 그냥 update 하면 dirty checking 안되나
         return Comment.from(commentEntity);
     }
 
+    @Transactional
     public void deleteComment(Long postId, Long commentId, UserEntity currentUser) {
         PostEntity postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(postId));
@@ -67,5 +71,7 @@ public class CommentService {
         }
 
         commentEntityRepository.delete(commentEntity);
+        postEntity.setCommentCount(Math.max(0, postEntity.getCommentCount() - 1)); //댓글 삭제시 댓글 카운트 -1
+        postEntityRepository.save(postEntity); //TODO: 이거 해줘야하나? save 안해도 자동으로 되는거 아닌가
     }
 }

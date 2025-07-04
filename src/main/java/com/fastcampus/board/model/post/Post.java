@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record Post(Long postId,
                    String body,
+                   Long commentCount,
                    User user,
                    ZonedDateTime createdDateTime,
                    ZonedDateTime updatedDateTime,
@@ -18,6 +19,7 @@ public record Post(Long postId,
         return new Post(
                 postEntity.getPostId(),
                 postEntity.getBody(),
+                postEntity.getCommentCount(),
                 User.from(postEntity.getUser()),
                 postEntity.getCreatedDateTime(),
                 postEntity.getUpdatedDateTime(),
