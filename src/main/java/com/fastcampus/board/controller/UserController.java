@@ -7,23 +7,19 @@ import com.fastcampus.board.service.PostService;
 import com.fastcampus.board.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 @RestController
 public class UserController {
 
-    @Autowired
     private final UserService userService;
 
-    @Autowired
     private final PostService postService;
 
     @GetMapping

@@ -5,21 +5,22 @@ import com.fastcampus.board.model.post.Post;
 import com.fastcampus.board.model.post.PostCreateRequestBody;
 import com.fastcampus.board.model.post.PostUpdateRequestBody;
 import com.fastcampus.board.service.PostService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/posts")
 public class PostController {
 
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
 
     @GetMapping
     public ResponseEntity<List<Post>> getPosts() {
