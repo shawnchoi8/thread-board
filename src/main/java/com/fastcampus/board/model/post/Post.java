@@ -19,7 +19,7 @@ public record Post(Long postId,
         return new Post(
                 postEntity.getPostId(),
                 postEntity.getBody(),
-                postEntity.getCommentCount(),
+                postEntity.getReplyCount(),
                 User.from(postEntity.getUser()),
                 postEntity.getCreatedDateTime(),
                 postEntity.getUpdatedDateTime(),

@@ -27,7 +27,7 @@ public class PostEntity {
     private String body;
 
     @Column
-    private Long commentCount = 0L;
+    private Long replyCount = 0L;
 
     @ManyToOne
     @JoinColumn(name = "userid")

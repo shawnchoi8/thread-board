@@ -14,16 +14,16 @@ import java.time.ZonedDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-@SQLDelete(sql = "UPDATE \"comment\" SET deleteddatetime = CURRENT_TIMESTAMP WHERE commentid = ?")
+@SQLDelete(sql = "UPDATE \"reply\" SET deleteddatetime = CURRENT_TIMESTAMP WHERE replyid = ?")
 @SQLRestriction("deleteddatetime IS NULL")
-@Table(name = "comment",
-        indexes = {@Index(name = "comment_userid_idx", columnList = "userid"), @Index(name = "comment_postid_idx", columnList = "postid")})
+@Table(name = "reply",
+        indexes = {@Index(name = "reply_userid_idx", columnList = "userid"), @Index(name = "reply_postid_idx", columnList = "postid")})
 @Entity
-public class CommentEntity {
+public class ReplyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;
+    private Long replyId;
 
     @Column(columnDefinition = "TEXT")
     private String body;
@@ -45,12 +45,12 @@ public class CommentEntity {
     @Column
     private ZonedDateTime deletedDateTime;
 
-    public static CommentEntity of(String body, UserEntity user, PostEntity post) {
-        CommentEntity commentEntity = new CommentEntity();
-        commentEntity.setBody(body);
-        commentEntity.setUser(user);
-        commentEntity.setPost(post);
-        return commentEntity;
+    public static ReplyEntity of(String body, UserEntity user, PostEntity post) {
+        ReplyEntity replyEntity = new ReplyEntity();
+        replyEntity.setBody(body);
+        replyEntity.setUser(user);
+        replyEntity.setPost(post);
+        return replyEntity;
     }
 
     @PrePersist
