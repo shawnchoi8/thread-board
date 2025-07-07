@@ -29,6 +29,9 @@ public class PostEntity {
     @Column
     private Long replyCount = 0L;
 
+    @Column
+    private Long likeCount = 0L;
+
     @ManyToOne
     @JoinColumn(name = "userid")
     private UserEntity user;
