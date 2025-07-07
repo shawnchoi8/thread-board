@@ -12,6 +12,7 @@ import com.fastcampus.board.model.entity.UserEntity;
 import com.fastcampus.board.repository.ReplyEntityRepository;
 import com.fastcampus.board.repository.PostEntityRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,11 @@ public class ReplyService {
     private final PostEntityRepository postEntityRepository;
 
     public List<Reply> getRepliesByPostId(Long postId) {
-        PostEntity postEntity = postEntityRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        List<ReplyEntity> replies = replyEntityRepository.findByPost(postEntity);
-        return replies.stream().map(Reply::from).toList();
+        PostEntity postEntity = postEntityRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException(postId));
+
+        List<ReplyEntity> replyEntities = replyEntityRepository.findByPost(postEntity);
+        return replyEntities.stream().map(Reply::from).toList();
     }
 
     @Transactional
@@ -36,8 +39,7 @@ public class ReplyService {
         PostEntity postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(postId));
 
-        ReplyEntity replyEntity = ReplyEntity.of(requestBody.body(), currentUser, postEntity);
-        replyEntityRepository.save(replyEntity);
+        ReplyEntity replyEntity = replyEntityRepository.save(ReplyEntity.of(requestBody.body(), currentUser, postEntity));
         postEntity.setReplyCount(postEntity.getReplyCount() + 1); //댓글 생성 시 댓글 숫자 카운트 +1
         return Reply.from(replyEntity);
     }

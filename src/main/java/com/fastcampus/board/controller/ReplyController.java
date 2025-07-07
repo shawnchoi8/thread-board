@@ -20,7 +20,7 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping
-    public ResponseEntity<List<Reply>> getReplies(@PathVariable Long postId) {
+    public ResponseEntity<List<Reply>> getRepliesByPostId(@PathVariable Long postId) {
         List<Reply> replies = replyService.getRepliesByPostId(postId);
         return ResponseEntity.ok(replies);
     }
