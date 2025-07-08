@@ -10,8 +10,8 @@ import java.time.ZonedDateTime;
 public record Post(
         Long postId,
         String body,
-        Long replyCount,
-        Long likeCount,
+        Long repliesCount,
+        Long likesCount,
         User user,
         Boolean isLiking,
         ZonedDateTime createdDateTime,
@@ -22,8 +22,8 @@ public record Post(
         return new Post(
                 postEntity.getPostId(),
                 postEntity.getBody(),
-                postEntity.getReplyCount(),
-                postEntity.getLikeCount(),
+                postEntity.getRepliesCount(),
+                postEntity.getLikesCount(),
                 User.from(postEntity.getUser()),
                 null,
                 postEntity.getCreatedDateTime(),
@@ -36,8 +36,8 @@ public record Post(
         return new Post(
                 postEntity.getPostId(),
                 postEntity.getBody(),
-                postEntity.getReplyCount(),
-                postEntity.getLikeCount(),
+                postEntity.getRepliesCount(),
+                postEntity.getLikesCount(),
                 User.from(postEntity.getUser()),
                 isLiking,
                 postEntity.getCreatedDateTime(),

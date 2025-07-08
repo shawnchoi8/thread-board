@@ -39,7 +39,7 @@ public class ReplyService {
                 .orElseThrow(() -> new PostNotFoundException(postId));
 
         ReplyEntity replyEntity = replyEntityRepository.save(ReplyEntity.of(requestBody.body(), currentUser, postEntity));
-        postEntity.setReplyCount(postEntity.getReplyCount() + 1); //댓글 생성 시 댓글 숫자 카운트 +1
+        postEntity.setRepliesCount(postEntity.getRepliesCount() + 1); //댓글 생성 시 댓글 숫자 카운트 +1
         return Reply.from(replyEntity);
     }
 
@@ -72,7 +72,7 @@ public class ReplyService {
         }
 
         replyEntityRepository.delete(replyEntity);
-        postEntity.setReplyCount(Math.max(0, postEntity.getReplyCount() - 1)); //댓글 삭제시 댓글 카운트 -1
+        postEntity.setRepliesCount(Math.max(0, postEntity.getRepliesCount() - 1)); //댓글 삭제시 댓글 카운트 -1
         postEntityRepository.save(postEntity); //TODO: 이거 해줘야하나? save 안해도 자동으로 되는거 아닌가
     }
 }

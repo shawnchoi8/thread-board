@@ -94,11 +94,11 @@ public class PostService {
 
         if (likeEntity.isPresent()) {
             likeEntityRepository.delete(likeEntity.get());
-            postEntity.setLikeCount(Math.max(0, postEntity.getLikeCount() - 1));
+            postEntity.setLikesCount(Math.max(0, postEntity.getLikesCount() - 1));
             return Post.from(postEntityRepository.save(postEntity), false);
         } else {
             likeEntityRepository.save(LikeEntity.of(currentUser, postEntity));
-            postEntity.setLikeCount(postEntity.getLikeCount() + 1);
+            postEntity.setLikesCount(postEntity.getLikesCount() + 1);
             return Post.from(postEntityRepository.save(postEntity), true);
         }
     }

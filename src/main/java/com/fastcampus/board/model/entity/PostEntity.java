@@ -27,10 +27,10 @@ public class PostEntity {
     private String body;
 
     @Column
-    private Long replyCount = 0L;
+    private Long repliesCount = 0L;
 
     @Column
-    private Long likeCount = 0L;
+    private Long likesCount = 0L;
 
     @ManyToOne
     @JoinColumn(name = "userid")
