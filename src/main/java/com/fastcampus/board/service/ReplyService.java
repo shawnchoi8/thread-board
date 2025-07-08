@@ -12,7 +12,6 @@ import com.fastcampus.board.model.entity.UserEntity;
 import com.fastcampus.board.repository.ReplyEntityRepository;
 import com.fastcampus.board.repository.PostEntityRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

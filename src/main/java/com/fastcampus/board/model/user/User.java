@@ -9,6 +9,8 @@ public record User(
         String username,
         String profile,
         String description,
+        Long followerCount,
+        Long followingCount,
         ZonedDateTime createdDateTime,
         ZonedDateTime updatedDateTime) {
 
@@ -18,6 +20,8 @@ public record User(
                 userEntity.getUsername(),
                 userEntity.getProfile(),
                 userEntity.getDescription(),
+                userEntity.getFollowerCount(),
+                userEntity.getFollowingCount(),
                 userEntity.getCreatedDateTime(),
                 userEntity.getUpdatedDateTime());
     }
