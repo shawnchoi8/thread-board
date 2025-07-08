@@ -29,15 +29,18 @@ public class PostService {
 
     private final LikeEntityRepository likeEntityRepository;
 
-    public List<Post> getPosts() {
+    public List<Post> getPosts(UserEntity currentUser) {
         List<PostEntity> postEntities = postEntityRepository.findAll();
-        return postEntities.stream().map(Post::from).toList();
+        return postEntities.stream()
+                .map(postEntity -> getPostWithLikingStatus(postEntity, currentUser))
+                .toList();
     }
 
-    public Post getPostByPostId(Long postId) {
+    public Post getPostByPostId(Long postId, UserEntity currentUser) {
         PostEntity postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(postId));
-        return Post.from(postEntity);
+
+        return getPostWithLikingStatus(postEntity, currentUser);
     }
 
     public Post createPost(PostCreateRequestBody postCreateRequestBody, UserEntity currentUser) {
@@ -72,12 +75,14 @@ public class PostService {
         postEntityRepository.delete(postEntity);
     }
 
-    public List<Post> getPostsByUsername(String username) {
+    public List<Post> getPostsByUsername(String username, UserEntity currentUser) {
         UserEntity userEntity = userEntityRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
 
         List<PostEntity> posts = postEntityRepository.findByUser(userEntity);
-        return posts.stream().map(Post::from).toList();
+        return posts.stream()
+                .map(postEntity -> getPostWithLikingStatus(postEntity, currentUser))
+                .toList();
     }
 
     @Transactional
@@ -90,11 +95,16 @@ public class PostService {
         if (likeEntity.isPresent()) {
             likeEntityRepository.delete(likeEntity.get());
             postEntity.setLikeCount(Math.max(0, postEntity.getLikeCount() - 1));
+            return Post.from(postEntityRepository.save(postEntity), false);
         } else {
             likeEntityRepository.save(LikeEntity.of(currentUser, postEntity));
             postEntity.setLikeCount(postEntity.getLikeCount() + 1);
+            return Post.from(postEntityRepository.save(postEntity), true);
         }
+    }
 
-        return Post.from(postEntityRepository.save(postEntity));
+    public Post getPostWithLikingStatus(PostEntity postEntity, UserEntity currentUser) {
+        boolean isLiking = likeEntityRepository.findByUserAndPost(currentUser, postEntity).isPresent();
+        return Post.from(postEntity, isLiking);
     }
 }
