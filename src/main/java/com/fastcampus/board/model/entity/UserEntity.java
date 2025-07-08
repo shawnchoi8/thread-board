@@ -18,7 +18,8 @@ import java.util.Random;
 @EqualsAndHashCode
 @SQLDelete(sql = "UPDATE \"user\" SET deleteddatetime = CURRENT_TIMESTAMP WHERE userid = ?")
 @SQLRestriction("deleteddatetime IS NULL")
-@Table(name = "\"user\"", indexes = @Index(name = "user_username_idx", columnList = "username", unique = true)) //postgresql 에서 user는 이미 사용되고 있는 예약어
+@Table(name = "\"user\"", indexes = @Index(name = "user_username_idx", columnList = "username", unique = true))
+//postgresql 에서 user는 이미 사용되고 있는 예약어
 @Entity
 public class UserEntity implements UserDetails {
 
@@ -39,10 +40,10 @@ public class UserEntity implements UserDetails {
     private String description; //bio
 
     @Column
-    private Long followerCount = 0L;
+    private Long followersCount = 0L;
 
     @Column
-    private Long followingCount = 0L;
+    private Long followingsCount = 0L;
 
     @Column
     private ZonedDateTime createdDateTime;
